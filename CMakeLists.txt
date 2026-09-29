@@ -758,7 +758,7 @@ if(BUILD_TESTING)
   target_link_libraries(test_fips crypto decrepit)
 
   add_executable(jitter_deltas util/fipstools/entropy/jitter_deltas.cc)
-  target_link_libraries(jitter_deltas crypto)
+  target_link_libraries(jitter_deltas crypto decrepit)
 
   add_executable(bssl_bench ${BENCH_SOURCES})
   target_link_libraries(bssl_bench ssl pki crypto decrepit benchmark::benchmark)
@@ -772,11 +772,11 @@ if(FIPS)
 endif()
 
 add_executable(bssl ${BSSL_SOURCES})
-target_link_libraries(bssl ssl crypto)
+target_link_libraries(bssl ssl crypto decrepit)
 
 if(BUILD_TESTING)
   add_executable(generate_mldsa_certs pki/testdata/verify_unittest/generate_mldsa_certs.cc)
-  target_link_libraries(generate_mldsa_certs crypto)
+  target_link_libraries(generate_mldsa_certs crypto decrepit)
 endif()
 
 if(FUZZ)
