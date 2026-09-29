@@ -20,6 +20,17 @@ OPENSSL_EXPORT void SM4_encrypt(const uint8_t *in, uint8_t *out,
 OPENSSL_EXPORT void SM4_decrypt(const uint8_t *in, uint8_t *out,
                                 const SM4_KEY *ks);
 
+OPENSSL_EXPORT int SM4_GCM_encrypt(const uint8_t key[16],
+                                   const uint8_t nonce[12], const uint8_t *aad,
+                                   size_t aad_len, const uint8_t *in,
+                                   size_t in_len, uint8_t *out,
+                                   uint8_t tag[16]);
+OPENSSL_EXPORT int SM4_GCM_decrypt(const uint8_t key[16],
+                                   const uint8_t nonce[12], const uint8_t *aad,
+                                   size_t aad_len, const uint8_t *in,
+                                   size_t in_len, const uint8_t tag[16],
+                                   uint8_t *out);
+
 #if defined(__cplusplus)
 }  // extern "C"
 #endif

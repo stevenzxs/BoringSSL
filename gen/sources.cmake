@@ -309,6 +309,7 @@ set(
 
   crypto/aes/aes.cc
   crypto/sm4/sm4.cc
+  crypto/sm4/sm4_gcm.cc
   crypto/asn1/a_bitstr.cc
   crypto/asn1/a_bool.cc
   crypto/asn1/a_d2i_fp.cc
@@ -787,6 +788,7 @@ set(
   crypto/chacha/chacha_test.cc
   crypto/cipher/aead_test.cc
   crypto/sm4/sm4_test.cc
+  crypto/sm4/sm4_gcm_test.cc
   crypto/cipher/cipher_test.cc
   crypto/cms/cms_test.cc
   crypto/compiler_test.cc
