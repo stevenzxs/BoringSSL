@@ -729,11 +729,13 @@ if(BUILD_TESTING)
   # PRNG initialisation, which means that it can't have other tests running before
   # it does.
   add_executable(urandom_test ${URANDOM_TEST_SOURCES})
-  target_link_libraries(urandom_test test_support_lib boringssl_gtest crypto)
+  target_link_libraries(urandom_test test_support_lib boringssl_gtest decrepit
+                        crypto)
   add_dependencies(boringssl_all_tests urandom_test)
 
   add_executable(crypto_test ${CRYPTO_TEST_SOURCES})
-  target_link_libraries(crypto_test test_support_lib boringssl_gtest crypto)
+  target_link_libraries(crypto_test test_support_lib boringssl_gtest decrepit
+                        crypto)
   add_dependencies(boringssl_all_tests crypto_test)
 
   add_executable(ssl_test ${SSL_TEST_SOURCES})
@@ -746,7 +748,8 @@ if(BUILD_TESTING)
   add_dependencies(boringssl_all_tests decrepit_test)
 
   add_executable(pki_test ${PKI_TEST_SOURCES})
-  target_link_libraries(pki_test test_support_lib boringssl_gtest pki crypto)
+  target_link_libraries(pki_test test_support_lib boringssl_gtest decrepit pki
+                        crypto)
   target_compile_options(pki_test PRIVATE ${PKI_CXX_FLAGS})
   add_dependencies(boringssl_all_tests pki_test)
 
