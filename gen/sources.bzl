@@ -349,6 +349,7 @@ crypto_sources = [
     "crypto/cipher/e_aeseax.cc",
     "crypto/cipher/e_aesgcmsiv.cc",
     "crypto/cipher/e_chacha20poly1305.cc",
+    "crypto/cipher/e_sm4gcm.cc",
     "crypto/cipher/e_des.cc",
     "crypto/cipher/e_null.cc",
     "crypto/cipher/e_rc2.cc",

@@ -121,6 +121,8 @@ OPENSSL_EXPORT const EVP_AEAD *EVP_aead_aes_192_gcm(void);
 // parameters, only use 12-byte nonces.
 OPENSSL_EXPORT const EVP_AEAD *EVP_aead_aes_256_gcm(void);
 
+OPENSSL_EXPORT const EVP_AEAD *EVP_aead_sm4_gcm(void);
+
 // EVP_aead_chacha20_poly1305 is the AEAD built from ChaCha20 and
 // Poly1305 as described in RFC 8439.
 OPENSSL_EXPORT const EVP_AEAD *EVP_aead_chacha20_poly1305(void);
