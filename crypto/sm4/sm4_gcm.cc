@@ -1,8 +1,7 @@
 #include <openssl/sm4.h>
 
-#include <openssl/mem.h>
-
 #include <stdint.h>
+#include <string.h>
 
 namespace {
 
@@ -21,7 +20,7 @@ void ShiftRight(uint8_t v[16]) {
 
 void GHashMultiply(uint8_t x[16], const uint8_t h[16]) {
   uint8_t z[16] = {}, v[16];
-  OPENSSL_memcpy(v, h, sizeof(v));
+  memcpy(v, h, sizeof(v));
   for (unsigned bit = 0; bit < 128; ++bit) {
     const uint8_t mask = static_cast<uint8_t>(0 - ((x[bit / 8] >> (7 - bit % 8)) & 1));
     for (size_t i = 0; i < 16; ++i) z[i] ^= v[i] & mask;
@@ -29,12 +28,12 @@ void GHashMultiply(uint8_t x[16], const uint8_t h[16]) {
     ShiftRight(v);
     v[0] ^= static_cast<uint8_t>(0xe1 & (0 - lsb));
   }
-  OPENSSL_memcpy(x, z, sizeof(z));
+  memcpy(x, z, sizeof(z));
 }
 
 void GHash(uint8_t out[16], const uint8_t h[16], const uint8_t *aad,
            size_t aad_len, const uint8_t *data, size_t data_len) {
-  OPENSSL_memset(out, 0, 16);
+  memset(out, 0, 16);
   auto absorb = [&](const uint8_t *p, size_t len) {
     while (len >= 16) {
       XorBlock(out, p);
@@ -44,7 +43,7 @@ void GHash(uint8_t out[16], const uint8_t h[16], const uint8_t *aad,
     }
     if (len != 0) {
       uint8_t block[16] = {};
-      OPENSSL_memcpy(block, p, len);
+      memcpy(block, p, len);
       XorBlock(out, block);
       GHashMultiply(out, h);
     }
@@ -75,7 +74,7 @@ void Increment32(uint8_t counter[16]) {
 void Crypt(const SM4_KEY *ks, const uint8_t counter0[16], const uint8_t *in,
            size_t len, uint8_t *out) {
   uint8_t counter[16], stream[16];
-  OPENSSL_memcpy(counter, counter0, sizeof(counter));
+  memcpy(counter, counter0, sizeof(counter));
   while (len != 0) {
     Increment32(counter);
     SM4_encrypt(counter, stream, ks);
@@ -99,7 +98,7 @@ int GCM(const uint8_t key[16], const uint8_t nonce[12], const uint8_t *aad,
   if (SM4_set_key(key, &ks) != 0) return 0;
   uint8_t h[16] = {}, j0[16] = {}, expected[16];
   SM4_encrypt(h, h, &ks);
-  OPENSSL_memcpy(j0, nonce, 12);
+  memcpy(j0, nonce, 12);
   j0[15] = 1;
   if (decrypt) {
     Crypt(&ks, j0, in, in_len, out);
@@ -112,13 +111,13 @@ int GCM(const uint8_t key[16], const uint8_t nonce[12], const uint8_t *aad,
     uint8_t diff = 0;
     for (size_t i = 0; i < 16; ++i) diff |= expected[i] ^ tag[i];
     if (diff != 0) {
-      OPENSSL_memset(out, 0, in_len);
+      memset(out, 0, in_len);
       return 0;
     }
     return 1;
   }
   Crypt(&ks, j0, in, in_len, out);
-  OPENSSL_memcpy(out_tag, expected, 16);
+  memcpy(out_tag, expected, 16);
   return 1;
 }
 
