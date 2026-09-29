@@ -1,0 +1,60 @@
+name: Build and publish BoringSSL GM source
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*-gm*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-linux:
+    name: Build and test (Linux)
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install build tools
+        run: sudo apt-get update && sudo apt-get install -y cmake ninja-build
+      - name: Configure
+        run: cmake -S . -B out/Release -GNinja -DCMAKE_BUILD_TYPE=Release
+      - name: Build
+        run: cmake --build out/Release
+      - name: Test
+        run: ctest --test-dir out/Release --output-on-failure
+
+  build-windows:
+    name: Build and test (Windows)
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Configure
+        shell: pwsh
+        run: cmake -S . -B out/Release -G Ninja -DCMAKE_BUILD_TYPE=Release
+      - name: Build
+        shell: pwsh
+        run: cmake --build out/Release
+      - name: Test
+        shell: pwsh
+        run: ctest --test-dir out/Release --output-on-failure
+
+  publish:
+    name: Publish source release
+    needs: [build-linux, build-windows]
+    runs-on: ubuntu-22.04
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Create source archive
+        run: git archive --format=zip --prefix="boringssl-${GITHUB_REF_NAME}/" "${GITHUB_SHA}" -o "boringssl-${GITHUB_REF_NAME}-source.zip"
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "${GITHUB_REF_NAME}" "boringssl-${GITHUB_REF_NAME}-source.zip" --generate-notes --verify-tag
