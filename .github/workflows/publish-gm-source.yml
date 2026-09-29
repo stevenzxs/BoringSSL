@@ -37,9 +37,12 @@ jobs:
         uses: ilammy/msvc-dev-cmd@v1
         with:
           arch: x64
+      - name: Install NASM
+        shell: pwsh
+        run: choco install nasm -y --no-progress
       - name: Configure
         shell: pwsh
-        run: cmake -S . -B out/Release -G Ninja -DCMAKE_BUILD_TYPE=Release
+        run: cmake -S . -B out/Release -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_ASM_NASM_COMPILER="C:\Program Files\NASM\nasm.exe"
       - name: Build
         shell: pwsh
         run: cmake --build out/Release
