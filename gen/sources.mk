@@ -834,6 +834,7 @@ boringssl_crypto_test_data := \
   crypto/cipher/test/aes_128_gcm_randnonce_tests.txt \
   crypto/cipher/test/aes_128_gcm_siv_tests.txt \
   crypto/cipher/test/aes_128_gcm_tests.txt \
+  crypto/cipher/test/sm4_gcm_tests.txt \
   crypto/cipher/test/aes_192_gcm_tests.txt \
   crypto/cipher/test/aes_256_cbc_sha1_tls_implicit_iv_tests.txt \
   crypto/cipher/test/aes_256_cbc_sha1_tls_tests.txt \

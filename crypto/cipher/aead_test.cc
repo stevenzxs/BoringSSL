@@ -83,6 +83,8 @@ static const struct KnownAEAD kAEADs[] = {
     {"AES_256_GCM", EVP_aead_aes_256_gcm, "aes_256_gcm_tests.txt",
      kCanTruncateTags | kVariableNonce},
 
+    {"SM4_GCM", EVP_aead_sm4_gcm, "sm4_gcm_tests.txt", kSkipIOVec},
+
     // A set of 31,000 test vectors imported from NIST. We skip iovec tests
     // because multiplicatively testing these vectors against different iovec
     // splits takes a very long time and is of low value. Instead, we assume
