@@ -43,9 +43,17 @@ void Crypt(const uint8_t *in, uint8_t *out, const SM4_KEY *ks, bool decrypt) {
 }  // namespace
 
 extern "C" int SM4_set_key(const uint8_t *key, SM4_KEY *ks) {
-  if (!key || !ks) return -1; uint32_t x[36];
-  for (unsigned i=0;i<4;++i) x[i]=LoadBE(key+4*i)^kFK[i];
-  for (unsigned i=0;i<32;++i) { x[i+4]=x[i]^TKey(x[i+1]^x[i+2]^x[i+3]^kCK[i]); ks->rk[i]=x[i+4]; }
+  if (!key || !ks) {
+    return -1;
+  }
+  uint32_t x[36];
+  for (unsigned i = 0; i < 4; ++i) {
+    x[i] = LoadBE(key + 4 * i) ^ kFK[i];
+  }
+  for (unsigned i = 0; i < 32; ++i) {
+    x[i + 4] = x[i] ^ TKey(x[i + 1] ^ x[i + 2] ^ x[i + 3] ^ kCK[i]);
+    ks->rk[i] = x[i + 4];
+  }
   return 0;
 }
 extern "C" void SM4_encrypt(const uint8_t *in, uint8_t *out, const SM4_KEY *ks) { Crypt(in,out,ks,false); }
