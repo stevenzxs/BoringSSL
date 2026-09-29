@@ -11,7 +11,7 @@ void XorBlock(uint8_t out[16], const uint8_t in[16]) {
 
 void ShiftRight(uint8_t v[16]) {
   uint8_t carry = 0;
-  for (size_t i = 0; i < 16; ++i) {
+  for (size_t i = 16; i-- > 0;) {
     const uint8_t next = v[i] & 1;
     v[i] = static_cast<uint8_t>((v[i] >> 1) | (carry << 7));
     carry = next;
