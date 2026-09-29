@@ -2,11 +2,13 @@
 
 #include <string.h>
 
+#include <openssl/cipher.h>
 #include <openssl/err.h>
 #include <openssl/mem.h>
 #include <openssl/sm4.h>
 #include <openssl/span.h>
 
+#include "../fipsmodule/cipher/internal.h"
 #include "internal.h"
 
 using namespace bssl;
